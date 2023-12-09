@@ -1,1 +1,161 @@
-<h1>Hello morsy</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .calendar {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .day {
+            cursor: pointer;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .todo-section {
+            margin-bottom: 20px;
+        }
+
+        .todo-input {
+            margin-right: 10px;
+        }
+
+        .todo-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .delete-btn {
+            margin-left: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="calendar" id="calendar"></div>
+
+<div id="todo-container"></div>
+
+<script>
+    const calendar = document.getElementById('calendar');
+    const todoContainer = document.getElementById('todo-container');
+
+    // Sample days for the calendar
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+    // Populate the calendar
+    days.forEach(day => {
+        const dayElement = document.createElement('div');
+        dayElement.classList.add('day');
+        dayElement.textContent = day;
+        dayElement.addEventListener('click', () => createTodoSection(day));
+        calendar.appendChild(dayElement);
+    });
+
+    // Object to store todo items for each day
+    const todoData = {};
+
+    // Function to create todo section for a specific day
+    function createTodoSection(day) {
+        // Check if section already exists
+        if (todoData[day]) {
+            alert('Todo section already exists for ' + day);
+            return;
+        }
+
+        // Create todo section
+        const todoSection = document.createElement('div');
+        todoSection.classList.add('todo-section');
+
+        // Section title
+        const sectionTitle = document.createElement('h2');
+        sectionTitle.textContent = day;
+        todoSection.appendChild(sectionTitle);
+
+        // Todo list
+        const todoList = document.createElement('ul');
+        todoList.classList.add('todo-list');
+        todoSection.appendChild(todoList);
+
+        // Input for adding todo items
+        const todoInput = document.createElement('input');
+        todoInput.setAttribute('type', 'text');
+        todoInput.setAttribute('placeholder', 'Add todo...');
+        todoInput.classList.add('todo-input');
+
+        // Button to add todo items
+        const addButton = document.createElement('button');
+        addButton.textContent = 'Add Todo';
+        addButton.addEventListener('click', () => addTodoItem(day, todoInput, todoList));
+        
+        // Append input and button to the todo section
+        todoSection.appendChild(todoInput);
+        todoSection.appendChild(addButton);
+
+        // Add todo section to the container
+        todoContainer.appendChild(todoSection);
+
+        // Store the todo section data
+        todoData[day] = { list: todoList, items: [] };
+    }
+
+    // Function to add todo items
+    function addTodoItem(day, input, list) {
+        const todoItemText = input.value.trim();
+
+        // Check if input is not empty
+        if (todoItemText === '') {
+            alert('Please enter a todo item.');
+            return;
+        }
+
+        // Check if max limit is reached
+        if (todoData[day].items.length >= 16) {
+            alert('Maximum limit of 16 todo items reached for ' + day);
+            return;
+        }
+
+        // Create todo item
+        const todoItem = document.createElement('li');
+        todoItem.classList.add('todo-item');
+        todoItem.innerHTML = `${todoItemText} <span class="delete-btn" onclick="deleteTodoItem('${day}', ${todoData[day].items.length})">X</span>`;
+
+        // Append todo item to the list
+        list.appendChild(todoItem);
+
+        // Add todo item to the data
+        todoData[day].items.push({ text: todoItemText, element: todoItem });
+
+        // Clear the input
+        input.value = '';
+    }
+
+    // Function to delete todo items
+    function deleteTodoItem(day, index) {
+        // Remove todo item from the list
+        todoData[day].list.removeChild(todoData[day].items[index].element);
+
+        // Remove todo item from the data
+        todoData[day].items.splice(index, 1);
+    }
+</script>
+
+</body>
+</html>
