@@ -1,110 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Todo List</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
+      body {
+        background: linear-gradient(to right, #d4a1f3, #784ba0);
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
 
-        .calendar {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-        }
+      .calendar {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 20px;
+      }
 
-        .day {
-            cursor: pointer;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+      .day {
+        cursor: pointer;
+        padding: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 5px;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        transition: background 0.3s ease, color 0.3s ease;
+      }
 
-        .todo-section {
-            margin-bottom: 20px;
-        }
+      .day:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: #fff;
+      }
 
-        .todo-input {
-            margin-right: 10px;
-        }
+      .todo-section {
+        margin-bottom: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        transition: background 0.3s ease;
+      }
 
-        .todo-list {
-            list-style-type: none;
-            padding: 0;
-        }
+      .todo-section:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
 
-        .todo-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
-        }
+      h2 {
+        color: #fff;
+        margin-bottom: 10px;
+      }
 
-        .delete-btn {
-            margin-left: 10px;
-            cursor: pointer;
-        }
+      .todo-list {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      .todo-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 8px;
+        border-radius: 5px;
+      }
+
+      .delete-btn {
+        margin-left: 10px;
+        cursor: pointer;
+        color: #fff;
+      }
+
+      .delete-btn:hover {
+        color: #ff6b6b;
+      }
+
+      .todo-input {
+        margin-right: 10px;
+        padding: 8px;
+        border: none;
+        border-radius: 5px;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+      }
+
+      .todo-input::placeholder {
+        color: #ccc;
+      }
+
+      .todo-input:focus {
+        outline: none;
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .add-btn {
+        padding: 8px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background: #ff55aa;
+        color: #fff;
+        transition: background 0.3s ease;
+      }
+
+      .add-btn:hover {
+        background: #ff3980;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
+    <div class="calendar" id="calendar"></div>
 
-<div class="calendar" id="calendar"></div>
+    <div id="todo-container"></div>
 
-<div id="todo-container"></div>
+    <script>
+      const calendar = document.getElementById("calendar");
+      const todoContainer = document.getElementById("todo-container");
 
-<script>
-    const calendar = document.getElementById('calendar');
-    const todoContainer = document.getElementById('todo-container');
+      // Sample days for the calendar
+      const days = [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+      ];
 
-    // Sample days for the calendar
-    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
-    // Populate the calendar
-    days.forEach(day => {
-        const dayElement = document.createElement('div');
-        dayElement.classList.add('day');
+      // Populate the calendar
+      days.forEach((day) => {
+        const dayElement = document.createElement("div");
+        dayElement.classList.add("day");
         dayElement.textContent = day;
-        dayElement.addEventListener('click', () => createTodoSection(day));
+        dayElement.addEventListener("click", () => createTodoSection(day));
         calendar.appendChild(dayElement);
-    });
+      });
 
-    // Object to store todo items for each day
-    const todoData = {};
+      // Object to store todo items for each day
+      const todoData = {};
 
-    // Function to create todo section for a specific day
-    function createTodoSection(day) {
+      // Function to create todo section for a specific day
+      function createTodoSection(day) {
         // Check if section already exists
         if (todoData[day]) {
-            alert('Todo section already exists for ' + day);
-            return;
+          alert("Todo section already exists for " + day);
+          return;
         }
 
         // Create todo section
-        const todoSection = document.createElement('div');
-        todoSection.classList.add('todo-section');
+        const todoSection = document.createElement("div");
+        todoSection.classList.add("todo-section");
 
         // Section title
-        const sectionTitle = document.createElement('h2');
+        const sectionTitle = document.createElement("h2");
         sectionTitle.textContent = day;
         todoSection.appendChild(sectionTitle);
 
         // Todo list
-        const todoList = document.createElement('ul');
-        todoList.classList.add('todo-list');
+        const todoList = document.createElement("ul");
+        todoList.classList.add("todo-list");
         todoSection.appendChild(todoList);
 
         // Input for adding todo items
-        const todoInput = document.createElement('input');
-        todoInput.setAttribute('type', 'text');
-        todoInput.setAttribute('placeholder', 'Add todo...');
-        todoInput.classList.add('todo-input');
+        const todoInput = document.createElement("input");
+        todoInput.setAttribute("type", "text");
+        todoInput.setAttribute("placeholder", "Add todo...");
+        todoInput.classList.add("todo-input");
 
         // Button to add todo items
-        const addButton = document.createElement('button');
-        addButton.textContent = 'Add Todo';
-        addButton.addEventListener('click', () => addTodoItem(day, todoInput, todoList));
-        
+        const addButton = document.createElement("button");
+        addButton.textContent = "Add Todo";
+        addButton.addEventListener("click", () =>
+          addTodoItem(day, todoInput, todoList)
+        );
+
         // Append input and button to the todo section
         todoSection.appendChild(todoInput);
         todoSection.appendChild(addButton);
@@ -114,27 +187,27 @@
 
         // Store the todo section data
         todoData[day] = { list: todoList, items: [] };
-    }
+      }
 
-    // Function to add todo items
-    function addTodoItem(day, input, list) {
+      // Function to add todo items
+      function addTodoItem(day, input, list) {
         const todoItemText = input.value.trim();
 
         // Check if input is not empty
-        if (todoItemText === '') {
-            alert('Please enter a todo item.');
-            return;
+        if (todoItemText === "") {
+          alert("Please enter a todo item.");
+          return;
         }
 
         // Check if max limit is reached
         if (todoData[day].items.length >= 16) {
-            alert('Maximum limit of 16 todo items reached for ' + day);
-            return;
+          alert("Maximum limit of 16 todo items reached for " + day);
+          return;
         }
 
         // Create todo item
-        const todoItem = document.createElement('li');
-        todoItem.classList.add('todo-item');
+        const todoItem = document.createElement("li");
+        todoItem.classList.add("todo-item");
         todoItem.innerHTML = `${todoItemText} <span class="delete-btn" onclick="deleteTodoItem('${day}', ${todoData[day].items.length})">X</span>`;
 
         // Append todo item to the list
@@ -144,18 +217,17 @@
         todoData[day].items.push({ text: todoItemText, element: todoItem });
 
         // Clear the input
-        input.value = '';
-    }
+        input.value = "";
+      }
 
-    // Function to delete todo items
-    function deleteTodoItem(day, index) {
+      // Function to delete todo items
+      function deleteTodoItem(day, index) {
         // Remove todo item from the list
         todoData[day].list.removeChild(todoData[day].items[index].element);
 
         // Remove todo item from the data
         todoData[day].items.splice(index, 1);
-    }
-</script>
-
-</body>
+      }
+    </script>
+  </body>
 </html>
