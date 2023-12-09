@@ -109,12 +109,46 @@
       .add-btn:hover {
         background: #ff3980;
       }
+
+      .full-calendar {
+        width: 70%;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        transition: background 0.3s ease;
+      }
+
+      .full-calendar:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
     </style>
   </head>
   <body>
-    <div class="calendar" id="calendar"></div>
+    <div class="container">
+      <div class="calendar-container">
+        <div class="calendar" id="calendar"></div>
+        <div id="todo-container"></div>
+      </div>
 
-    <div id="todo-container"></div>
+      <div class="full-calendar" id="full-calendar"></div>
+    </div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.6.4.min.js"
+      integrity="sha256-oP6HI/tZ1a9F0Ib6o+5G0tB0tN3s0fMGy1P38HsFo7A="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
+      integrity="sha256-JRQdeJUEoSOG+/PVwLis6mft2c/+WOb2XhzvvLqG82U="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"
+      integrity="sha256-Dg3p1Jh2sZ2fXBe3VS7N6G+0nn1qYk7PpafdBquW2T0="
+      crossorigin="anonymous"
+    ></script>
 
     <script>
       const calendar = document.getElementById("calendar");
@@ -228,6 +262,19 @@
         // Remove todo item from the data
         todoData[day].items.splice(index, 1);
       }
+
+      $("#full-calendar").fullCalendar({
+        header: {
+          left: "prev,next today",
+          center: "title",
+          right: "month,agendaWeek,agendaDay",
+        },
+        defaultView: "month",
+        height: 600,
+        events: [
+          // Add your events here if needed
+        ],
+      });
     </script>
   </body>
 </html>
